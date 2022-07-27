@@ -18,33 +18,35 @@ export const Form = () => {
     return (
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
             <label className="label">
-                <span className="label-title">Имя Фамилия</span>
-                <input className="label-input" {...register("name")} type={"text"} />
-                {errors.name && <span className="label-error">{errors.name.message}</span>}
+                <span className="name">Имя Фамилия</span>
+                <input className="input" {...register("name")} type={"text"} />
+                <span className="error">{errors.name?.message || ""}</span>
             </label>
             <label className="label">
-                <span className="label-title">E-mail</span>
-                <input className="label-input" {...register("mail")} type={"email"} />
-                {errors.mail && <span className="label-error">{errors.mail.message}</span>}
+                <span className="name">E-mail</span>
+                <input className="input" {...register("mail")} type={"email"} />
+                <span className="error">{errors.mail?.message || ""}</span>
             </label>
             <label className="label">
-                <span className="label-title">Номер телефона</span>
-                <span className="label-prefix">+7</span>
-                <PhoneInput control={control} name={"phone"} />
-                {errors.phone && <span className="label-error">{errors.phone.message}</span>}
+                <span className="name">Номер телефона</span>
+                <div className="input-wrapper">
+                    <span className="prefix">+7</span>
+                    <PhoneInput control={control} name={"phone"} />
+                </div>
+                <span className="error">{errors.phone?.message || ""}</span>
             </label>
             <label className="label">
-                <span className="label-title">Дата рождения</span>
-                <input className="label-input" {...register("birthdate")} type={"date"} />
-                {errors.birthdate && <span className="label-error">{errors.birthdate.message}</span>}
+                <span className="name">Дата рождения</span>
+                <input className="input" {...register("birthdate")} type={"date"} />
+                <span className="error">{errors.birthdate?.message || ""}</span>
             </label>
             <label className="label">
-                <span className="label-title">Сообщение</span>
-                <textarea className="label-textarea" {...register("message")} />
-                {errors.message && <span className="label-error">{errors.message.message}</span>}
+                <span className="name">Сообщение</span>
+                <textarea className="textarea" {...register("message")} />
+                <span className="error">{errors.message?.message || ""}</span>
             </label>
             
-            <button type="submit">Отправить</button>
+            <button className="submit-button" type="submit">Отправить</button>
         </form>
     )
 }
