@@ -1,5 +1,5 @@
 import React from "react";
 
-export const App = () => {
+export const Form = () => {
     return <div>Hello World!!!</div>
 }
