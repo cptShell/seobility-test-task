@@ -1,30 +1,22 @@
 import Joi from "joi";
-import PhoneNumberExtension from "joi-phone-number";
-const customJoi = Joi.extend(PhoneNumberExtension) as typeof Joi;
+import { FormSchemaDto } from "../types/form.type";
 
-type FormSchemaDto = {
-    name: string,
-    mail: string,
-    phone: string,
-    birthdate: string,
-    message: string,
-}
-
-const FormSchema = customJoi.object<FormSchemaDto>({
-    name: Joi.string().pattern(new RegExp('^[A-Za-z]{3,30}\s[A-Za-z]{3,30}$')).required().messages({
+export const FormSchema = Joi.object<FormSchemaDto>({
+    name: Joi.string().pattern(new RegExp(/^[A-Za-z]{3,30}\s[A-Za-z]{3,30}$/)).required().messages({
         "string.empty": "Введите имя и фамилию",
-        "string.pattern": "Имя или фамилия введены некорректно",
+        "string.pattern.base": "Имя или фамилия введены некорректно",
     }),
-    mail: Joi.string().email().required().messages({
+    mail: Joi.string().email({tlds: { allow: false }}).required().messages({
         "string.empty": "Введите электронную почту",
         "string.email": "Электронная почта введена некорректно",
     }),
-    phone: Joi.string().phoneNumber({defaultCountry: 'RUS', format: 'international'}).required().messages({
+    phone: Joi.string().pattern(new RegExp(/^\([1-9]\d\d\)\s\d\d\d\s\d\d\s\d\d$/)).required().messages({
+        "any.required": "Введите номер телефона",
         "string.empty": "Введите номер телефона",
-        "string.phoneNumber": "Номер телефона введен некорректно",
+        "string.pattern.base": "Номер телефона введен некорректно",
     }),
-    birthdate: Joi.date().greater('now').required().messages({
-        "date.empty": "Введите дату рождения",
+    birthdate: Joi.date().less('now').required().messages({
+        "date.base": "Введите дату рождения",
         "date.less": "Сначала родитесь"
     }),
     message: Joi.string().min(10).max(300).required().messages({
