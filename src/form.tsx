@@ -106,7 +106,7 @@ export const Form = () => {
         <form className="form" ref={formRef} onSubmit={(e) => handleSubmit(e)}>
             <label className="label">
                 <span className="name">Имя Фамилия</span>
-                <input disabled={isSending} className="input uppercase" onChange={handleChange('name')} type={"text"} />
+                <input disabled={isSending} className="input upper" onChange={handleChange('name')} type={"text"} />
                 <span className="error">{errors.name || ""}</span>
             </label>
             <label className="label">
@@ -117,9 +117,8 @@ export const Form = () => {
             <label className="label">
                 <span className="name">Номер телефона</span>
                 <div className="input-wrapper">
-                    <span className="prefix">+7</span>
+                    <span>+7</span>
                     <MaskedInput 
-                        className="input phone"
                         mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ' ', /\d/, /\d/]} 
                         placeholder="(***) *** ** **"
                         showMask
