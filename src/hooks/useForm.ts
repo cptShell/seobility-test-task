@@ -100,8 +100,6 @@ export const UseForm = <T extends Record<keyof T, any> = {}>(options?: {
         setErrors({});
     }
 
-    console.log(data, errors);
-
     return {
         data,
         handleChange,

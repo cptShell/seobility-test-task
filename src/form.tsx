@@ -16,8 +16,6 @@ export const Form = () => {
             return;
         }
 
-        console.log('send');
-
         setInSending(true);
         setBlockSubmit(true);
         const url = "https://cptshell-weather-app.herokuapp.com/form";
@@ -95,7 +93,7 @@ export const Form = () => {
 
     const today = new Date().toISOString().split('T')[0];
     const hasErrors = Object.keys(errors).length !== 0;
-    console.log("block", blockSubmit);
+
     if (!blockSubmit && hasErrors) {
         setBlockSubmit(true);
     }
