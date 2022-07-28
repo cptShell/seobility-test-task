@@ -106,7 +106,7 @@ export const Form = () => {
         <form className="form" ref={formRef} onSubmit={(e) => handleSubmit(e)}>
             <label className="label">
                 <span className="name">Имя Фамилия</span>
-                <input className="input" onChange={handleChange('name')} type={"text"} />
+                <input className="input uppercase" onChange={handleChange('name')} type={"text"} />
                 <span className="error">{errors.name || ""}</span>
             </label>
             <label className="label">
