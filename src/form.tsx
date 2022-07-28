@@ -106,12 +106,12 @@ export const Form = () => {
         <form className="form" ref={formRef} onSubmit={(e) => handleSubmit(e)}>
             <label className="label">
                 <span className="name">Имя Фамилия</span>
-                <input className="input uppercase" onChange={handleChange('name')} type={"text"} />
+                <input disabled={isSending} className="input uppercase" onChange={handleChange('name')} type={"text"} />
                 <span className="error">{errors.name || ""}</span>
             </label>
             <label className="label">
                 <span className="name">E-mail</span>
-                <input className="input" onChange={handleChange('mail')} type={"email"} required={false}/>
+                <input disabled={isSending} className="input" onChange={handleChange('mail')} type={"email"} required={false}/>
                 <span className="error">{errors.mail || ""}</span>
             </label>
             <label className="label">
@@ -125,18 +125,19 @@ export const Form = () => {
                         showMask
                         guide={false}
                         onChange={handleChange("phone")}
+                        disabled={isSending}
                     />
                 </div>
                 <span className="error">{errors.phone || ""}</span>
             </label>
             <label className="label">
                 <span className="name">Дата рождения</span>
-                <input className="input" onChange={handleChange("birthdate")} type={"date"} max={today}/>
+                <input disabled={isSending} className="input" onChange={handleChange("birthdate")} type={"date"} max={today}/>
                 <span className="error">{errors.birthdate || ""}</span>
             </label>
             <label className="label">
                 <span className="name">Сообщение</span>
-                <textarea className="textarea" wrap="hard" onChange={handleChange("message")} cols={21}/>
+                <textarea disabled={isSending} className="textarea" wrap="hard" onChange={handleChange("message")} cols={21}/>
                 <span className="error">{errors.message || ""}</span>
             </label>
             
