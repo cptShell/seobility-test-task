@@ -1,16 +1,42 @@
-import { useEffect, useState } from 'react';
-import { UseForm } from './hooks/useForm';
-import { FormSchemaDto } from "./types/types"; 
+import { useRef, useState } from 'react';
 import MaskedInput from 'react-text-mask';
 import clsx from 'clsx';
-
-
+import axios from 'axios';
+import { UseForm } from './hooks/useForm';
+import { FormSchemaDto, ResponseDto } from "./types/types"; 
+import { ResponseStatus } from './enums/response-dto.enum';
  
 export const Form = () => {
     const [blockSubmit, setBlockSubmit] = useState(false);
-    const [isValidation, setIsValidation] = useState(false);
-    
-    const { handleSubmit, handleChange, data, errors, validate } = UseForm<FormSchemaDto>({
+    const [isSending, setInSending] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const send = async () => {
+        if (hasErrors) {
+            return;
+        }
+
+        console.log('send');
+
+        setInSending(true);
+        setBlockSubmit(true);
+        const url = "https://cptshell-weather-app.herokuapp.com/form";
+        const response = await axios.get<ResponseDto>(url);
+        const { status, message } = response.data;
+        
+        if (status === ResponseStatus.ERROR) {
+            alert(`Ой! ${message}`);
+        } else {
+            alert(`Ура! ${message}`);
+            resetData();
+            formRef.current?.reset();
+        }
+
+        setInSending(false);
+        setBlockSubmit(false);
+    }
+
+    const { handleSubmit, handleChange, resetData, errors } = UseForm<FormSchemaDto>({
         validations: {
             name: {
                 required: {
@@ -64,22 +90,22 @@ export const Form = () => {
                 },
             }
         },
-        onSubmit: () => {
-            setBlockSubmit(false);
-        }
+        onSubmit: send,
     });
 
+    const today = new Date().toISOString().split('T')[0];
     const hasErrors = Object.keys(errors).length !== 0;
+    console.log("block", blockSubmit);
     if (!blockSubmit && hasErrors) {
         setBlockSubmit(true);
-    } 
+    }
 
-    const send = () => {
-        console.log(data);
+    if (!hasErrors && blockSubmit && !isSending) {
+        setBlockSubmit(false);
     }
 
     return (
-        <form className="form" onSubmit={(e) => handleSubmit(e, send)}>
+        <form className="form" ref={formRef} onSubmit={(e) => handleSubmit(e)}>
             <label className="label">
                 <span className="name">Имя Фамилия</span>
                 <input className="input" onChange={handleChange('name')} type={"text"} />
@@ -107,18 +133,18 @@ export const Form = () => {
             </label>
             <label className="label">
                 <span className="name">Дата рождения</span>
-                <input className="input" onChange={handleChange("birthdate")} type={"date"} />
+                <input className="input" onChange={handleChange("birthdate")} type={"date"} max={today}/>
                 <span className="error">{errors.birthdate || ""}</span>
             </label>
             <label className="label">
                 <span className="name">Сообщение</span>
-                <input className="textarea" type={"text"} onChange={handleChange("message")}/>
+                <textarea className="textarea" wrap="hard" onChange={handleChange("message")} cols={21}/>
                 <span className="error">{errors.message || ""}</span>
             </label>
             
             <button className={clsx("submit-button", {
                 "disabled": blockSubmit
-            })} type="submit">Отправить</button>
+            })} type="submit" disabled={blockSubmit}>Отправить</button>
         </form>
     )
 }

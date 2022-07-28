@@ -30,7 +30,7 @@ export const UseForm = <T extends Record<keyof T, any> = {}>(options?: {
     const handleChange = <S extends unknown>(
         key: keyof T,
         sanitizeFn?: (value: string) => S
-    ) => (e: ChangeEvent<HTMLInputElement>) => {
+    ) => (e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
         const value = sanitizeFn ? sanitizeFn(e.target.value) : e.target.value;
 
         setData({
@@ -43,8 +43,7 @@ export const UseForm = <T extends Record<keyof T, any> = {}>(options?: {
         }
     };
 
-    const validate = () => {
-        console.log(data);
+    const validate = (): boolean => {
         const validations = options?.validations;
 
         if (validations) {
@@ -77,7 +76,7 @@ export const UseForm = <T extends Record<keyof T, any> = {}>(options?: {
             if (!valid) {
                 setErrors(newErrors);
 
-                return;
+                return false;
             }
         }
 
@@ -86,14 +85,22 @@ export const UseForm = <T extends Record<keyof T, any> = {}>(options?: {
         if (options?.onSubmit) {
             options.onSubmit();
         }
+
+        return true;
     }
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>, actionFn: () => void) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         validate();
-        actionFn();
     };
+
+    const resetData = () => {
+        setData({} as T);
+        setErrors({});
+    }
+
+    console.log(data, errors);
 
     return {
         data,
@@ -101,5 +108,6 @@ export const UseForm = <T extends Record<keyof T, any> = {}>(options?: {
         handleSubmit,
         errors,
         validate,
+        resetData,
     };
 };
