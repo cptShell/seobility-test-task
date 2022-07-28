@@ -78,4 +78,11 @@ body {
     cursor: pointer;
     background-color: rgb(123, 13, 123);
   }
+  &.disabled {
+    background-color: gray;
+    &:hover {
+      cursor: default;
+      background-color: gray;
+    }
+  }
 }
